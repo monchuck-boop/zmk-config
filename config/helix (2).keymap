@@ -1,0 +1,161 @@
+// OS設定を日本語キーボードのまま使用するための変換定義
+
+#define JP_DQUOTE       AT                // "
+#define JP_AMPERSAND    CARET             // &
+#define JP_QUOTE        AMPERSAND         // '
+#define JP_EQUAL        UNDER             // =
+#define JP_CARET        EQUAL             // ^
+#define JP_YEN          0x89              // ¥
+#define JP_PLUS         COLON             // +
+#define JP_TILDE        PLUS              // ~
+#define JP_PIPE         LS(0x89)          // |
+#define JP_AT           LEFT_BRACKET      // @
+#define JP_COLON        SINGLE_QUOTE      // :
+#define JP_ASTERISK     DOUBLE_QUOTES     // *
+#define JP_BACKQUOTE    LEFT_BRACE        // `
+#define JP_UNDERSCORE   LS(0x87)          // _
+#define JP_LBRACKET     RIGHT_BRACKET     // [
+#define JP_RBRACKET     BACKSLASH         // ]
+#define JP_LPAREN       ASTERISK          // (
+#define JP_RPAREN       LEFT_PARENTHESIS  // )
+#define JP_LBRACE       RIGHT_BRACE       // {
+#define JP_RBRACE       PIPE              // }
+#define JP_KANA         LANGUAGE_1        // かな
+#define JP_EISU         LANGUAGE_2        // 英数
+#define JP_HANZEN       GRAVE             // 半角/全角
+
+#include <locale/keys_ja.h> // 日本語配列用ヘッダー
+
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/ext_power.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/rgb.h>
+
+#define DEFAULT 0
+#define LOWER  1
+#define RAISE  2
+#define ADJUST 3
+
+/* NOTE: At the time of the creation of this keymap, there are no specified codes for 'eisuu' and 'kana' input in ZMK.
+However, 'LANG1' and 'LANG2' are fully-functioning candidates for 'kana' and 'eisuu' input respectively.
+As such, those are in use within the default layer at this time.*/
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            //* Base
+            //   * ,-----------------------------------------.             ,-----------------------------------------.
+            //   * |  C+z |   ;  |   [  |   (  |   <  |   {  |             |      |      |      |      |      |      |
+            //   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            //   * | KANA |   P  |   K  |   R  |   A  |   F  |             |      |      |      |      |      |      |
+            //   * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            //   * |  BS  |   D  |   T  |   H  |   E  |   O  |             |      |      |      |      |      |      |
+            //   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            //   * | Shift|   Y  |   S  |   N  |   I  |   U  |Space |      |      |      |      |      |      |      |
+            //   * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            //   * | Ctrl | Alt  | Gui  | Sym  | Num  | OPT  | Ent  |      |      |      |      |      |      |      |
+            //   * `-------------------------------------------------------------------------------------------------'
+
+            bindings = <
+&kp LC(Z)         &kp SEMI  &kp LBKT  &kp LPAR  &kp LT  &kp LBRC                          &kp N6     &kp N7     &kp N8     &kp N9      &kp N0     &kp DEL
+&kp GRAVE         &kp P     &kp K     &kp R     &kp A   &kp F                             &kp Y      &kp U      &kp I      &kp O       &kp P      &kp BSPC
+&kp BSPC          &kp D     &kp T     &kp H     &kp E   &kp O                             &kp H      &kp J      &kp K      &kp L       &kp SEMI   &kp SQT
+&kp LEFT_SHIFT    &kp Y     &kp S     &kp N     &kp I   &kp U     &kp SPACE    &kp RBKT   &kp N      &kp M      &kp COMMA  &kp PERIOD  &kp SLASH  &kp RET
+&kp LEFT_CONTROL  &kp LALT  &kp LGUI  &mo 3     &mo 2   &mo 1     &kp RET      &kp SPACE  &mo RAISE  &kp LANG1  &kp LEFT   &kp DOWN    &kp UP     &kp RIGHT
+            >;
+        };
+
+        opt_layer {
+            //* Opt
+            // * ,-----------------------------------------.             ,-----------------------------------------.
+            // * |  Esc |  :   |  ]   |  )   |  >   |  }   |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            // * |  EISU|   J  |   M  |   B  |   '  |  Tab |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            // * |   .  |   V  |   C  |   L  |   Z  |  Q   |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            // * |      |   X  |   G  |   W  |   -  |  Del | Esc  |      |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            // * |      |      |      |   ,  | DTOP |      |      |      |      |      |      |      |      |      |
+            // * `-------------------------------------------------------------------------------------------------'         
+
+            bindings = <
+&kp ESC    &kp SINGLE_QUOTE  &kp RBKT  &kp RPAR  &kp GT     &kp RBRC                     &trans     &trans     &trans     &trans    &trans    &trans
+&kp LANG1  &kp J             &kp M     &kp B     &kp SQT    &kp TAB                      &kp CARET  &kp AMPS   &kp ASTRK  &kp LPAR  &kp RPAR  &trans
+&kp DOT    &kp V             &kp C     &kp L     &kp Z      &kp Q                        &trans     &kp UNDER  &kp PLUS   &kp LBRC  &kp RBRC  &kp PIPE
+&trans     &kp X             &kp G     &kp W     &kp MINUS  &kp DEL   &kp ESC    &trans  &trans     &kp HOME   &kp END    &trans    &trans    &trans
+&trans     &trans            &trans    &trans    &trans     &trans    &trans     &trans  &trans     &trans     &trans     &trans
+            >;
+        };
+
+        num_layer {
+            //* Func
+            // * ,-----------------------------------------.             ,-----------------------------------------.
+            // * |RGBRST|  Hue |      |  RST |  Mac |  Win |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            // * | RGB1 | VAL+ |  F7  |  F8  |  F9  |      |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------|             |------+------+------+------+------+------|
+            // * | RGB2 | VAL- |  F4  |  F5  |  F6  | F12  |             |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            // * | RGB3 |  F10 |  F1  |  F2  |  F3  | F11  |      |      |      |      |      |      |      |      |
+            // * |------+------+------+------+------+------+------+------+------+------+------+------+------+------|
+            // * |RGBOFF|      |      |      |      |      |      |      |      |      |      |      |      |      |
+            // * `-------------------------------------------------------------------------------------------------'
+
+            bindings = <
+&trans          &trans        &trans        &kp HOME      &kp END       &trans                            &trans   &trans     &trans      &trans        &trans        &trans
+&kp GRAVE       &kp ASTERISK  &kp N7        &kp N8        &kp N9        &kp MINUS                         &kp N6   &kp N7     &kp N8      &kp N9        &kp N0        &kp DEL
+&trans          &kp SLASH     &kp NUMBER_4  &kp N5        &kp NUMBER_6  &kp PLUS                          &kp F6   &kp MINUS  &kp EQUAL   &kp LBKT      &kp RBKT      &kp BSLH
+&kp KP_NUMLOCK  &kp N0        &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp LS(LC(F1))  &trans    &trans  &kp F12  &trans     &kp PSCRN   &kp PG_DN     &kp PG_UP     &trans
+&trans          &trans        &kp N0        &kp COMMA     &kp PERIOD    &trans          &trans    &trans  &trans   &trans     &kp C_NEXT  &kp C_VOL_DN  &kp C_VOL_UP  &kp C_PP
+            >;
+        };
+
+        sym_layer {
+            // ---------------------------------------------------------------------------------------------------------------------------------
+            // |    `     |    !     |    @     |    #     |    $     |    %     |                                          |    ^     |    &     |    *     |    (     |    )     |  EP TOG  |
+            // |  BT CLR  | BT SEL0  | BT SEL1  | BT SEL2  | BGT SEL3 | BT SEL4  |                                          | RGB EFF+ | RGB HUE+ | RGB SAT+ | RGB SPD+ | RGB BRI+ | RGB TOG  |
+            // |  BT NXT  | OUT TOG  | OUT USB  | OUT BLE  |          |          |                                          | RGB EFF- | RGB HUE- | RGB SAT- | RGB SPD- | RGB BRI- |          |
+            // |  BT PRV  |          |          |          |          |          |    {     |                    |    }     |          |          |          |          |          |          |
+            // |          |          |          |          |          |          |          |                    |          |          |          |          |          |          |          |
+
+            bindings = <
+&kp INSERT  &kp EXCL              &trans           &kp PAGE_UP      &kp PG_DN        &kp CARET                            &kp CARET        &kp AMPS         &kp ASTRK        &kp LPAR         &kp RPAR         &ext_power EP_TOG
+&trans      &kp NON_US_BACKSLASH  &kp HASH         &kp EQUAL        &kp QUESTION     &kp PERCENT                          &rgb_ug RGB_EFF  &rgb_ug RGB_HUI  &rgb_ug RGB_SAI  &rgb_ug RGB_SPI  &rgb_ug RGB_BRI  &rgb_ug RGB_TOG
+&bt BT_NXT  &out OUT_TOG          &kp UP_ARROW     &kp AT_SIGN      &kp EXCLAMATION  &kp PIPE                             &rgb_ug RGB_EFR  &rgb_ug RGB_HUD  &rgb_ug RGB_SAD  &rgb_ug RGB_SPD  &rgb_ug RGB_BRD  &trans
+&kp CAPS    &kp LEFT_ARROW        &kp DOWN_ARROW   &kp RIGHT_ARROW  &kp UNDERSCORE   &kp AMPERSAND  &kp LBRC    &kp RBRC  &trans           &trans           &trans           &trans           &trans           &trans
+&trans      &trans                &kp PRINTSCREEN  &trans           &kp TILDE        &trans         &trans      &trans    &trans           &trans           &trans           &trans           &trans           &trans
+            >;
+        };
+
+        func_layer {
+            bindings = <
+&bt BT_CLR     &trans  &kp F10  &kp F11  &kp F12  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&bt BT_DISC 0  &trans  &kp F7   &kp F8   &kp F9   &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans         &trans  &kp F4   &kp F5   &kp F6   &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans         &trans  &kp F1   &kp F2   &kp F3   &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans         &trans  &trans   &trans   &trans   &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+
+        layer_5 {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
+    };
+};
